@@ -12,15 +12,15 @@ namespace VDS.CourseAdminMastering.WebApi.Controllers
     public class ProgramController : BaseController
     {
         private ILogger<ProgramController> _logger;
-        private readonly IFeatureManagerSnapshot _featureManagerSnapshot;
+        private readonly IFeatureManager _featureManager;
         private bool _enableBrms;
         private bool _enableMastering;
         private bool _continueValidationOnBehaviourRulesError;
 
-        public ProgramController(ILogger<ProgramController> logger, IFeatureManagerSnapshot featureManagerSnapshot)
+        public ProgramController(ILogger<ProgramController> logger, IFeatureManager featureManager)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _featureManagerSnapshot = featureManagerSnapshot ?? throw new ArgumentNullException(nameof(featureManagerSnapshot));
+            _featureManager = featureManager ?? throw new ArgumentNullException(nameof(featureManager));
         }
 
         [HttpPost("Program/Master/Validate")]
@@ -37,9 +37,9 @@ namespace VDS.CourseAdminMastering.WebApi.Controllers
             _enableMastering = true;
             if (WebApi.AppConfigExists)
             {
-                _continueValidationOnBehaviourRulesError = await _featureManagerSnapshot.IsEnabledAsync(ProgramFeatureFlagConstants.EnableContinueValidationOnBehaviourRulesError);
-                _enableBrms = await _featureManagerSnapshot.IsEnabledAsync(ProgramFeatureFlagConstants.EnableBrms);
-                _enableMastering = await _featureManagerSnapshot.IsEnabledAsync(ProgramFeatureFlagConstants.EnableMastering);
+                _continueValidationOnBehaviourRulesError = await _featureManager.IsEnabledAsync(ProgramFeatureFlagConstants.EnableContinueValidationOnBehaviourRulesError);
+                _enableBrms = await _featureManager.IsEnabledAsync(ProgramFeatureFlagConstants.EnableBrms);
+                _enableMastering = await _featureManager.IsEnabledAsync(ProgramFeatureFlagConstants.EnableMastering);
             }
 
             _logger.LogInformation($"AppConfig { (WebApi.AppConfigExists ? "found" : "not found") }. ContinueValidationOnBehaviourRulesError = {_continueValidationOnBehaviourRulesError}; EnableBrms = {_enableBrms}; EnableMastering = {_enableMastering}.");
