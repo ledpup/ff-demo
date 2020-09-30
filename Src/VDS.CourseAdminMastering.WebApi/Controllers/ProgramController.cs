@@ -13,14 +13,16 @@ namespace VDS.CourseAdminMastering.WebApi.Controllers
     {
         private ILogger<ProgramController> _logger;
         private readonly IFeatureManager _featureManager;
+        IDisposable _simpleDisposableClass;
         private bool _enableBrms;
         private bool _enableMastering;
         private bool _continueValidationOnBehaviourRulesError;
 
-        public ProgramController(ILogger<ProgramController> logger, IFeatureManager featureManager)
+        public ProgramController(ILogger<ProgramController> logger, IFeatureManager featureManager, IDisposable simpleDisposableClass)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _featureManager = featureManager ?? throw new ArgumentNullException(nameof(featureManager));
+            _simpleDisposableClass = simpleDisposableClass;
         }
 
         [HttpPost("Program/Master/Validate")]

@@ -79,6 +79,8 @@ namespace VDS.CourseAdminMastering.WebApi
                     .AllowAnyHeader());
             });
 
+            services.AddSingleton(typeof(IDisposable), typeof(SimpleDisposableClass));
+
             services.AddFeatureManagement();
         }
 
